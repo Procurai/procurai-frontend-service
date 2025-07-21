@@ -80,7 +80,7 @@ procurai-frontend-service/
    - [x] Set up project structure as outlined above
 
 2. **Create Base Components**
-   - [ ] Implement common UI components (Button, Card, Badge, etc.)
+   - [x] Implement common UI components (Button, Card, Badge, etc.)
    - [ ] Create layout components (Header, Navigation, Footer)
    - [ ] Set up the main application layout
 
