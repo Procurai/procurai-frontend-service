@@ -1,5 +1,7 @@
 import pumps from './mockData/pumps';
 import spares from './mockData/spares';
+import oems from './mockData/oems';
+import releases from './mockData/releases';
 
 // Helper function to simulate API delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -19,6 +21,10 @@ const mockFetch = async (endpoint, params = {}, method = 'GET') => {
       return filterSpares(params);
     case 'spares/compatibility':
       return getCompatibleSpares(params);
+    case 'oems':
+      return filterOEMs(params);
+    case 'oem/releases':
+      return getOEMReleases(params);
     default:
       return [];
   }
@@ -186,6 +192,60 @@ const getCompatibleSpares = (params) => {
   );
 };
 
+// Filter OEMs based on search parameters
+const filterOEMs = (params) => {
+  let results = [...oems];
+  
+  // Filter by search query
+  if (params.query) {
+    const query = params.query.toLowerCase();
+    results = results.filter(oem => 
+      oem.name.toLowerCase().includes(query) || 
+      oem.description.toLowerCase().includes(query) ||
+      oem.location.toLowerCase().includes(query)
+    );
+  }
+  
+  // Filter by specialty
+  if (params.specialty) {
+    results = results.filter(oem => 
+      oem.specialties.includes(params.specialty)
+    );
+  }
+  
+  // Filter by ESG rating
+  if (params.esgRating) {
+    const ratings = ['B', 'B+', 'A', 'A+'];
+    const minRatingIndex = ratings.indexOf(params.esgRating);
+    if (minRatingIndex !== -1) {
+      const validRatings = ratings.slice(minRatingIndex);
+      results = results.filter(oem => validRatings.includes(oem.esgRating));
+    }
+  }
+  
+  return results;
+};
+
+// Get product releases, optionally filtered by OEM
+const getOEMReleases = (params) => {
+  let results = [...releases];
+  
+  // Filter by OEM ID
+  if (params.oemId) {
+    results = results.filter(release => release.oemId === params.oemId);
+  }
+  
+  // Filter by pump type
+  if (params.type) {
+    results = results.filter(release => release.type === params.type);
+  }
+  
+  // Sort by release date (newest first)
+  results.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+  
+  return results;
+};
+
 const api = {
   // Pump related endpoints
   pumps: {
@@ -205,6 +265,16 @@ const api = {
       return Promise.resolve(spare || null);
     },
     getCompatible: (pumpType) => mockFetch('spares/compatibility', { pumpType }),
+  },
+  
+  // OEM related endpoints
+  oem: {
+    getAll: (params = {}) => mockFetch('oems', params),
+    getById: (id) => {
+      const oem = oems.find(o => o.id === id);
+      return Promise.resolve(oem || null);
+    },
+    getNewReleases: (params = {}) => mockFetch('oem/releases', params),
   }
 };
 

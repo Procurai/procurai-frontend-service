@@ -111,7 +111,7 @@ procurai-frontend-service/
 
 1. **Implement Each Tab**
    - [x] Spares & Accessories
-   - [ ] OEM Insights
+   - [x] OEM Insights
    - [ ] Enterprise AI
    - [ ] Results
    - [ ] Comparison
