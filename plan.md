@@ -110,7 +110,7 @@ procurai-frontend-service/
 ## Phase 3: Feature Implementation
 
 1. **Implement Each Tab**
-   - [ ] Spares & Accessories
+   - [x] Spares & Accessories
    - [ ] OEM Insights
    - [ ] Enterprise AI
    - [ ] Results

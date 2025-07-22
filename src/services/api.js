@@ -1,4 +1,5 @@
 import pumps from './mockData/pumps';
+import spares from './mockData/spares';
 
 // Helper function to simulate API delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -14,6 +15,10 @@ const mockFetch = async (endpoint, params = {}, method = 'GET') => {
       return filterPumps(params);
     case 'pumps/recommendations':
       return getRecommendations(params);
+    case 'spares':
+      return filterSpares(params);
+    case 'spares/compatibility':
+      return getCompatibleSpares(params);
     default:
       return [];
   }
@@ -126,6 +131,61 @@ const getRecommendations = (params) => {
   return filterPumps(params);
 };
 
+// Filter spares based on search parameters
+const filterSpares = (params) => {
+  let results = [...spares];
+  
+  // Filter by search query
+  if (params.query) {
+    const query = params.query.toLowerCase();
+    results = results.filter(spare => 
+      spare.name.toLowerCase().includes(query) || 
+      spare.description.toLowerCase().includes(query) ||
+      spare.category.toLowerCase().includes(query)
+    );
+  }
+  
+  // Filter by category
+  if (params.category) {
+    results = results.filter(spare => spare.category === params.category);
+  }
+  
+  // Filter by compatibility
+  if (params.compatibility) {
+    results = results.filter(spare => 
+      spare.compatibility.includes(params.compatibility) || 
+      spare.compatibility.includes('all')
+    );
+  }
+  
+  // Filter by price range
+  if (params.price) {
+    if (params.price.min) {
+      results = results.filter(spare => spare.price >= params.price.min);
+    }
+    if (params.price.max) {
+      results = results.filter(spare => spare.price <= params.price.max);
+    }
+  }
+  
+  // Filter by availability
+  if (params.inStock !== undefined) {
+    results = results.filter(spare => spare.inStock === params.inStock);
+  }
+  
+  return results;
+};
+
+// Get compatible spares for a specific pump type
+const getCompatibleSpares = (params) => {
+  if (!params.pumpType) return [];
+  
+  return spares.filter(spare => 
+    spare.compatibility.includes(params.pumpType) || 
+    spare.compatibility.includes('all')
+  );
+};
+
 const api = {
   // Pump related endpoints
   pumps: {
@@ -135,6 +195,16 @@ const api = {
       return Promise.resolve(pump || null);
     },
     getRecommendations: (params) => mockFetch('pumps/recommendations', params),
+  },
+  
+  // Spares related endpoints
+  spares: {
+    search: (params) => mockFetch('spares', params),
+    getById: (id) => {
+      const spare = spares.find(s => s.id === id);
+      return Promise.resolve(spare || null);
+    },
+    getCompatible: (pumpType) => mockFetch('spares/compatibility', { pumpType }),
   }
 };
 
