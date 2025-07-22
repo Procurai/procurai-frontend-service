@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
+import api from '../services/api';
 
 const SearchContext = createContext();
 
@@ -18,16 +19,26 @@ export const SearchProvider = ({ children }) => {
     certification: null
   });
 
-  const search = (query) => {
+  const search = async (query) => {
     setSearchQuery(query);
     setIsSearching(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      // Mock results would be set here
+    try {
+      // Get search parameters from filters
+      const searchParams = {
+        query,
+        ...filters
+      };
+      
+      // Call API to search pumps
+      const results = await api.pumps.search(searchParams);
+      setSearchResults(results);
+    } catch (error) {
+      console.error('Error searching pumps:', error);
       setSearchResults([]);
+    } finally {
       setIsSearching(false);
-    }, 2000);
+    }
   };
 
   const updateFilter = (filterType, value) => {

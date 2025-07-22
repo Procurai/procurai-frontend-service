@@ -3,6 +3,7 @@ import React from 'react';
 const Badge = ({ 
   children, 
   variant = 'default',
+  color,
   size = 'md',
   className = '',
   ...props 
@@ -19,6 +20,9 @@ const Badge = ({
     esg: 'esg-badge bg-green-100 text-green-800',
   };
   
+  // Custom color classes
+  const colorClasses = color ? `bg-${color}-100 text-${color}-800` : '';
+  
   const sizeClasses = {
     sm: 'text-xs px-2 py-0.5',
     md: 'text-xs px-2.5 py-1',
@@ -27,7 +31,7 @@ const Badge = ({
   
   return (
     <span 
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`${baseClasses} ${color ? colorClasses : variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...props}
     >
       {children}

@@ -1,10 +1,10 @@
 import React from 'react';
+import SearchResults from './SearchResults';
 
 const Results = () => {
   return (
     <div className="space-y-8">
-      <h2 className="text-3xl font-bold">AI Results</h2>
-      <p className="text-gray-600">AI Recommendations with ESG Scoring</p>
+      <SearchResults />
     </div>
   );
 };

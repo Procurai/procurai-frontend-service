@@ -1,12 +1,10 @@
 import React from 'react';
 import SearchInterface from './SearchInterface';
-import { SearchProvider } from '../../../context/SearchContext';
 
 const SmartFinder = () => {
   return (
-    <SearchProvider>
-      <div className="space-y-8">
-        {/* Hero Section */}
+    <div className="space-y-8">
+      {/* Hero Section */}
         <div className="text-center space-y-3 sm:space-y-4">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Find the Perfect Pump with AI</h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
@@ -24,7 +22,6 @@ const SmartFinder = () => {
         {/* Search Interface Component */}
         <SearchInterface />
       </div>
-    </SearchProvider>
   );
 };
 
