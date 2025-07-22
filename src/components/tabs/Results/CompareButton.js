@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useComparison } from '../../../context/ComparisonContext';
 
-const CompareButton = ({ selectedCount = 0 }) => {
+const CompareButton = ({ selectedItems = {} }) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+  const { addItem } = useComparison();
   
-  const handleCompare = () => {
+  const selectedCount = Object.keys(selectedItems).length;
+  
+  const handleCompare = async () => {
     if (selectedCount >= 2) {
+      // Add selected items to comparison context
+      const itemIds = Object.keys(selectedItems);
+      for (const id of itemIds) {
+        await addItem(id);
+      }
       navigate('/comparison');
     }
   };

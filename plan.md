@@ -114,7 +114,7 @@ procurai-frontend-service/
    - [x] OEM Insights
    - [x] Enterprise AI
    - [x] Results
-   - [ ] Comparison
+   - [x] Comparison
    - [ ] Sustainability Dashboard
    - [ ] Emergency
    - [ ] Chat Assistant

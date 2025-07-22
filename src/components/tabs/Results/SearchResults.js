@@ -4,8 +4,9 @@ import Card from '../../common/ui/Card';
 import Badge from '../../common/ui/Badge';
 import api from '../../../services/api';
 import ResultsSorting from './ResultsSorting';
+import CompareButton from './CompareButton';
 
-const SearchResults = ({ onSelectForCompare = () => {} }) => {
+const SearchResults = () => {
   const { searchResults, setSearchResults, isSearching, searchQuery, filters } = useSearch();
   const [selectedPumps, setSelectedPumps] = useState({});
 
@@ -74,7 +75,6 @@ const SearchResults = ({ onSelectForCompare = () => {} }) => {
     }
     
     setSelectedPumps(newSelectedPumps);
-    onSelectForCompare(Object.keys(newSelectedPumps).length);
   };
 
   return (
@@ -177,6 +177,7 @@ const SearchResults = ({ onSelectForCompare = () => {} }) => {
           </Card>
         ))}
       </div>
+      <CompareButton selectedItems={selectedPumps} />
     </div>
   );
 };
