@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import './animations.css';
 
 body {
   font-family: 'Inter', sans-serif;
@@ -17,15 +18,7 @@ body {
   -webkit-text-fill-color: transparent; 
 }
 
-.animate-spin-slow { 
-  animation: spin 2s linear infinite; 
-}
-
-.animate-pulse-glow { 
-  animation: pulse-glow 2s ease-in-out infinite; 
-}
-
-@keyframes pulse-glow { 
-  0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); } 
-  50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); } 
+/* India flag styling */
+.india-flag { 
+  background: linear-gradient(to right, #ff9933, #ffffff, #138808); 
 }

@@ -81,8 +81,8 @@ procurai-frontend-service/
 
 2. **Create Base Components**
    - [x] Implement common UI components (Button, Card, Badge, etc.)
-   - [ ] Create layout components (Header, Navigation, Footer)
-   - [ ] Set up the main application layout
+   - [x] Create layout components (Header, Navigation, Footer)
+   - [x] Set up the main application layout
 
 3. **Implement Routing**
    - [ ] Install and configure React Router
