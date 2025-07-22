@@ -113,7 +113,7 @@ procurai-frontend-service/
    - [x] Spares & Accessories
    - [x] OEM Insights
    - [x] Enterprise AI
-   - [ ] Results
+   - [x] Results
    - [ ] Comparison
    - [ ] Sustainability Dashboard
    - [ ] Emergency

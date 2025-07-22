@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useSearch from '../../../hooks/useSearch';
 import Card from '../../common/ui/Card';
 import Badge from '../../common/ui/Badge';
 import api from '../../../services/api';
+import ResultsSorting from './ResultsSorting';
 
-const SearchResults = () => {
+const SearchResults = ({ onSelectForCompare = () => {} }) => {
   const { searchResults, setSearchResults, isSearching, searchQuery, filters } = useSearch();
+  const [selectedPumps, setSelectedPumps] = useState({});
 
   // If no search has been performed yet, load all pumps
   React.useEffect(() => {
@@ -61,6 +63,20 @@ const SearchResults = () => {
     );
   }
 
+  // Handle pump selection for comparison
+  const handleSelectPump = (pumpId) => {
+    const newSelectedPumps = { ...selectedPumps };
+    
+    if (newSelectedPumps[pumpId]) {
+      delete newSelectedPumps[pumpId];
+    } else {
+      newSelectedPumps[pumpId] = true;
+    }
+    
+    setSelectedPumps(newSelectedPumps);
+    onSelectForCompare(Object.keys(newSelectedPumps).length);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -74,11 +90,21 @@ const SearchResults = () => {
           <span className="font-medium">96% Confidence • ESG Verified</span>
         </div>
       </div>
+      
+      <ResultsSorting />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {searchResults.map(pump => (
-          <Card key={pump.id} className="pump-card">
+          <Card key={pump.id} className={`pump-card ${selectedPumps[pump.id] ? 'ring-2 ring-blue-500' : ''}`}>
             <div className="p-4">
+              <div className="absolute top-2 right-2">
+                <input 
+                  type="checkbox" 
+                  checked={!!selectedPumps[pump.id]}
+                  onChange={() => handleSelectPump(pump.id)}
+                  className="h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                />
+              </div>
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-lg font-semibold text-gray-900">{pump.name}</h3>
                 <Badge color={getEsgColor(pump.esgRating)} className="esg-badge">
@@ -136,9 +162,17 @@ const SearchResults = () => {
                 </div>
               </div>
               
-              <button className="mt-4 w-full bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 text-white py-2 rounded-lg font-medium hover:from-green-700 hover:via-blue-700 hover:to-purple-700 transition-all">
-                View Details
-              </button>
+              <div className="mt-4 flex space-x-2">
+                <button className="flex-1 bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 text-white py-2 rounded-lg font-medium hover:from-green-700 hover:via-blue-700 hover:to-purple-700 transition-all">
+                  View Details
+                </button>
+                <button 
+                  onClick={() => handleSelectPump(pump.id)}
+                  className={`px-3 py-2 rounded-lg font-medium transition-all ${selectedPumps[pump.id] ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}
+                >
+                  {selectedPumps[pump.id] ? 'Selected' : 'Compare'}
+                </button>
+              </div>
             </div>
           </Card>
         ))}

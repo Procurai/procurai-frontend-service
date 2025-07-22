@@ -66,6 +66,7 @@ export const SearchProvider = ({ children }) => {
     searchQuery,
     setSearchQuery,
     searchResults,
+    setSearchResults,
     isSearching,
     filters,
     search,
