@@ -2,6 +2,8 @@ import pumps from './mockData/pumps';
 import spares from './mockData/spares';
 import oems from './mockData/oems';
 import releases from './mockData/releases';
+import agents from './mockData/agents';
+import tasks from './mockData/tasks';
 
 // Helper function to simulate API delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -25,6 +27,10 @@ const mockFetch = async (endpoint, params = {}, method = 'GET') => {
       return filterOEMs(params);
     case 'oem/releases':
       return getOEMReleases(params);
+    case 'agents':
+      return filterAgents(params);
+    case 'agent/tasks':
+      return getAgentTasks(params);
     default:
       return [];
   }
@@ -246,6 +252,53 @@ const getOEMReleases = (params) => {
   return results;
 };
 
+// Filter AI agents based on search parameters
+const filterAgents = (params) => {
+  let results = [...agents];
+  
+  // Filter by search query
+  if (params.query) {
+    const query = params.query.toLowerCase();
+    results = results.filter(agent => 
+      agent.name.toLowerCase().includes(query) || 
+      agent.description.toLowerCase().includes(query) ||
+      agent.type.toLowerCase().includes(query)
+    );
+  }
+  
+  // Filter by agent type
+  if (params.type) {
+    results = results.filter(agent => agent.type === params.type);
+  }
+  
+  // Filter by status
+  if (params.status) {
+    results = results.filter(agent => agent.status === params.status);
+  }
+  
+  return results;
+};
+
+// Get tasks for a specific agent or all tasks
+const getAgentTasks = (params) => {
+  let results = [...tasks];
+  
+  // Filter by agent ID
+  if (params.agentId) {
+    results = results.filter(task => task.agentId === params.agentId);
+  }
+  
+  // Filter by status
+  if (params.status) {
+    results = results.filter(task => task.status === params.status);
+  }
+  
+  // Sort by start time (newest first)
+  results.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+  
+  return results;
+};
+
 const api = {
   // Pump related endpoints
   pumps: {
@@ -275,6 +328,37 @@ const api = {
       return Promise.resolve(oem || null);
     },
     getNewReleases: (params = {}) => mockFetch('oem/releases', params),
+  },
+  
+  // Enterprise AI related endpoints
+  enterprise: {
+    getAgents: (params = {}) => mockFetch('agents', params),
+    getAgentById: (id) => {
+      const agent = agents.find(a => a.id === id);
+      return Promise.resolve(agent || null);
+    },
+    getTasks: (params = {}) => mockFetch('agent/tasks', params),
+    getTaskById: (id) => {
+      const task = tasks.find(t => t.id === id);
+      return Promise.resolve(task || null);
+    },
+    runAgent: (agentId, params = {}) => {
+      // Simulate running an agent
+      const newTaskId = `task${Math.floor(Math.random() * 1000)}`.padStart(6, '0');
+      const newTask = {
+        id: newTaskId,
+        agentId,
+        title: params.title || 'New Task',
+        status: 'in-progress',
+        progress: 0,
+        startTime: new Date().toISOString(),
+        endTime: null,
+        results: null
+      };
+      
+      tasks.push(newTask);
+      return Promise.resolve({ taskId: newTaskId, status: 'started' });
+    }
   }
 };
 

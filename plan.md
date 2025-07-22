@@ -112,7 +112,7 @@ procurai-frontend-service/
 1. **Implement Each Tab**
    - [x] Spares & Accessories
    - [x] OEM Insights
-   - [ ] Enterprise AI
+   - [x] Enterprise AI
    - [ ] Results
    - [ ] Comparison
    - [ ] Sustainability Dashboard
