@@ -2,8 +2,8 @@ import React from 'react';
 import Header from '../common/Header';
 import Navigation from '../common/Navigation';
 import Footer from '../common/Footer';
-import TabContent from './TabContent';
 import { AppProvider } from '../../context/AppContext';
+import AppRoutes from '../../routes';
 
 const MainLayout = () => {
   return (
@@ -16,7 +16,9 @@ const MainLayout = () => {
           <Navigation />
         </div>
         <main className="flex-grow overflow-y-auto w-full">
-          <TabContent />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 md:py-8">
+            <AppRoutes />
+          </div>
         </main>
         <div className="flex-shrink-0 w-full">
           <Footer />

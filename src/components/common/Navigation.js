@@ -1,8 +1,8 @@
 import React from 'react';
-import { useAppContext } from '../../context/AppContext';
+import useTab from '../../hooks/useTab';
 
 const Navigation = () => {
-  const { activeTab, setActiveTab } = useAppContext();
+  const { activeTab, navigateToTab } = useTab();
 
   const tabs = [
     { id: 'finder', name: 'Smart Finder', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' },
@@ -17,7 +17,7 @@ const Navigation = () => {
   ];
 
   const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
+    navigateToTab(tabId);
   };
 
   return (
