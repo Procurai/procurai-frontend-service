@@ -4,9 +4,11 @@ const ProgressBar = ({
   value = 0, 
   max = 100,
   variant = 'primary',
+  color,
   size = 'md',
   showLabel = false,
   className = '',
+  height,
   ...props 
 }) => {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
@@ -35,11 +37,27 @@ const ProgressBar = ({
     lg: 'h-3',
   };
   
+  // Custom color classes
+  const getColorClasses = () => {
+    if (!color) return {
+      bg: variantClasses[variant],
+      bar: barVariantClasses[variant]
+    };
+    
+    return {
+      bg: `bg-${color}-200`,
+      bar: `bg-${color}-600`
+    };
+  };
+  
+  const colorClasses = getColorClasses();
+  const heightClass = height || sizeClasses[size];
+  
   return (
     <div className={`${className}`}>
-      <div className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`} {...props}>
+      <div className={`${baseClasses} ${colorClasses.bg} ${heightClass}`} {...props}>
         <div 
-          className={`${barVariantClasses[variant]} h-full esg-progress`} 
+          className={`${colorClasses.bar} h-full esg-progress`} 
           style={{ width: `${percentage}%` }}
         />
       </div>

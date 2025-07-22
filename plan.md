@@ -115,7 +115,7 @@ procurai-frontend-service/
    - [x] Enterprise AI
    - [x] Results
    - [x] Comparison
-   - [ ] Sustainability Dashboard
+   - [x] Sustainability Dashboard
    - [ ] Emergency
    - [ ] Chat Assistant
 

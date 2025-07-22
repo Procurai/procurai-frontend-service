@@ -4,6 +4,7 @@ import oems from './mockData/oems';
 import releases from './mockData/releases';
 import agents from './mockData/agents';
 import tasks from './mockData/tasks';
+import esgData from './mockData/esgData';
 
 // Helper function to simulate API delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -31,6 +32,14 @@ const mockFetch = async (endpoint, params = {}, method = 'GET') => {
       return filterAgents(params);
     case 'agent/tasks':
       return getAgentTasks(params);
+    case 'esg/dashboard':
+      return esgData;
+    case 'esg/suppliers':
+      return esgData.supplierCompliance;
+    case 'esg/goals':
+      return esgData.goals;
+    case 'esg/certifications':
+      return esgData.certifications;
     default:
       return [];
   }
@@ -358,6 +367,22 @@ const api = {
       
       tasks.push(newTask);
       return Promise.resolve({ taskId: newTaskId, status: 'started' });
+    }
+  },
+  
+  // ESG related endpoints
+  esg: {
+    getDashboard: () => mockFetch('esg/dashboard'),
+    getSupplierRatings: () => mockFetch('esg/suppliers'),
+    getGoals: () => mockFetch('esg/goals'),
+    getCertifications: () => mockFetch('esg/certifications'),
+    generateReport: (params = {}) => {
+      // Simulate generating a report
+      return Promise.resolve({
+        status: 'success',
+        reportUrl: '/reports/esg-report-2023.pdf',
+        generatedAt: new Date().toISOString()
+      });
     }
   }
 };
