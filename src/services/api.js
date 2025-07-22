@@ -5,6 +5,7 @@ import releases from './mockData/releases';
 import agents from './mockData/agents';
 import tasks from './mockData/tasks';
 import esgData from './mockData/esgData';
+import emergency from './mockData/emergency';
 
 // Helper function to simulate API delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -40,6 +41,12 @@ const mockFetch = async (endpoint, params = {}, method = 'GET') => {
       return esgData.goals;
     case 'esg/certifications':
       return esgData.certifications;
+    case 'emergency/suppliers':
+      return filterEmergencySuppliers(params);
+    case 'emergency/parts':
+      return filterEmergencyParts(params);
+    case 'emergency/cases':
+      return emergency.cases;
     default:
       return [];
   }
@@ -308,6 +315,74 @@ const getAgentTasks = (params) => {
   return results;
 };
 
+// Filter emergency suppliers based on search parameters
+const filterEmergencySuppliers = (params) => {
+  let results = [...emergency.suppliers];
+  
+  // Filter by specialty
+  if (params.specialty) {
+    results = results.filter(supplier => 
+      supplier.specialties.includes(params.specialty)
+    );
+  }
+  
+  // Filter by max response time
+  if (params.maxResponseTime) {
+    results = results.filter(supplier => 
+      supplier.responseTime <= params.maxResponseTime
+    );
+  }
+  
+  // Filter by max distance
+  if (params.maxDistance) {
+    results = results.filter(supplier => 
+      supplier.distance <= params.maxDistance
+    );
+  }
+  
+  // Sort by response time (fastest first)
+  if (params.sortBy === 'responseTime') {
+    results.sort((a, b) => a.responseTime - b.responseTime);
+  }
+  // Sort by distance (closest first)
+  else if (params.sortBy === 'distance') {
+    results.sort((a, b) => a.distance - b.distance);
+  }
+  // Sort by rating (highest first)
+  else if (params.sortBy === 'rating') {
+    results.sort((a, b) => b.rating - a.rating);
+  }
+  
+  return results;
+};
+
+// Filter emergency parts based on search parameters
+const filterEmergencyParts = (params) => {
+  let results = [...emergency.parts];
+  
+  // Filter by category
+  if (params.category) {
+    results = results.filter(part => part.category === params.category);
+  }
+  
+  // Filter by compatibility
+  if (params.compatibility) {
+    results = results.filter(part => 
+      part.compatibility.includes(params.compatibility) || 
+      part.compatibility.includes('all')
+    );
+  }
+  
+  // Filter by location
+  if (params.location) {
+    results = results.filter(part => 
+      part.location.toLowerCase().includes(params.location.toLowerCase())
+    );
+  }
+  
+  return results;
+};
+
 const api = {
   // Pump related endpoints
   pumps: {
@@ -382,6 +457,22 @@ const api = {
         status: 'success',
         reportUrl: '/reports/esg-report-2023.pdf',
         generatedAt: new Date().toISOString()
+      });
+    }
+  },
+  
+  // Emergency related endpoints
+  emergency: {
+    getSuppliers: (params = {}) => mockFetch('emergency/suppliers', params),
+    getParts: (params = {}) => mockFetch('emergency/parts', params),
+    getCases: () => mockFetch('emergency/cases'),
+    requestService: (params = {}) => {
+      // Simulate requesting emergency service
+      return Promise.resolve({
+        status: 'success',
+        requestId: `req-${Math.floor(Math.random() * 10000)}`,
+        estimatedResponseTime: '1-2 hours',
+        timestamp: new Date().toISOString()
       });
     }
   }

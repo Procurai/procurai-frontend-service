@@ -116,7 +116,7 @@ procurai-frontend-service/
    - [x] Results
    - [x] Comparison
    - [x] Sustainability Dashboard
-   - [ ] Emergency
+   - [x] Emergency
    - [ ] Chat Assistant
 
 2. **Interactive Features**
@@ -127,7 +127,7 @@ procurai-frontend-service/
 
 3. **Data Visualization**
    - [ ] Implement charts and graphs for market analysis
-   - [ ] Create ESG performance visualizations
+   - [x] Create ESG performance visualizations
    - [ ] Build interactive dashboards
 
 ## Phase 4: Polish and Optimization
@@ -198,10 +198,10 @@ procurai-frontend-service/
    - [ ] ApplicationSegments
 
 3. **ESGDashboard**
-   - [ ] ESGScorecard
-   - [ ] PerformanceChart
-   - [ ] SupplierRankings
-   - [ ] SustainabilityGoals
+   - [x] ESGScorecard
+   - [x] PerformanceChart
+   - [x] SupplierRankings
+   - [x] SustainabilityGoals
 
 ## Mock API Structure
 

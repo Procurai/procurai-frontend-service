@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../services/api';
 import ESGScorecard from './ESGScorecard';
+import ESGTrends from './ESGTrends';
 import CarbonFootprint from './CarbonFootprint';
 import ResourceMetrics from './ResourceMetrics';
 import SupplierCompliance from './SupplierCompliance';
@@ -58,6 +59,8 @@ const Sustainability = () => {
       
       <div className="grid grid-cols-1 gap-6">
         <ESGScorecard scores={esgData.overallScores} />
+        
+        <ESGTrends trends={esgData.trends} />
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <CarbonFootprint data={esgData.carbonFootprint} />
