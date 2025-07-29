@@ -6,6 +6,7 @@ import agents from './mockData/agents';
 import tasks from './mockData/tasks';
 import esgData from './mockData/esgData';
 import emergency from './mockData/emergency';
+import { chatMessages, quickResponses, getSuggestedQuestions } from './mockData/chatMessages';
 
 // Helper function to simulate API delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -473,6 +474,53 @@ const api = {
         requestId: `req-${Math.floor(Math.random() * 10000)}`,
         estimatedResponseTime: '1-2 hours',
         timestamp: new Date().toISOString()
+      });
+    }
+  },
+  
+  // Chat related endpoints
+  chat: {
+    getMessages: () => Promise.resolve([...chatMessages]),
+    getQuickResponses: () => Promise.resolve([...quickResponses]),
+    getSuggestedQuestions: (lastMessage) => {
+      return Promise.resolve(getSuggestedQuestions(lastMessage || ''));
+    },
+    sendMessage: (message) => {
+      // Simulate sending a message and getting a response
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const newUserMessage = {
+            id: `msg${Math.floor(Math.random() * 10000)}`,
+            sender: 'user',
+            content: message,
+            timestamp: new Date().toISOString()
+          };
+          
+          // Simple response logic based on keywords
+          let botResponse = {
+            id: `msg${Math.floor(Math.random() * 10000)}`,
+            sender: 'bot',
+            content: 'I understand you need assistance. Could you provide more details about your requirements?',
+            timestamp: new Date(Date.now() + 1000).toISOString()
+          };
+          
+          if (message.toLowerCase().includes('pump')) {
+            if (message.toLowerCase().includes('centrifugal')) {
+              botResponse.content = 'Centrifugal pumps are the most common type used in industrial applications. They work by converting rotational energy from a motor to energy in a moving fluid. What specific requirements do you have for your centrifugal pump?';
+            } else if (message.toLowerCase().includes('positive displacement')) {
+              botResponse.content = 'Positive displacement pumps work by trapping a fixed amount of fluid and forcing it from the inlet to the outlet. They are excellent for high-pressure applications and viscous fluids. What specific requirements do you have for your positive displacement pump?';
+            } else {
+              botResponse.content = 'I can help you find the right pump for your application. Could you tell me more about your requirements such as flow rate, pressure, and the fluid being pumped?';
+            }
+          } else if (message.toLowerCase().includes('spare') || message.toLowerCase().includes('part')) {
+            botResponse.content = 'We have a wide range of spare parts available for various pump models. Could you specify the pump model or the specific part you are looking for?';
+          } else if (message.toLowerCase().includes('emergency')) {
+            botResponse.content = 'For emergency pump services, I recommend checking our Emergency tab where you can find 24/7 service providers and emergency parts. Would you like me to provide more information about our emergency services?';
+          }
+          
+          chatMessages.push(newUserMessage, botResponse);
+          resolve([newUserMessage, botResponse]);
+        }, 1000);
       });
     }
   }

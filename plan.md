@@ -117,7 +117,7 @@ procurai-frontend-service/
    - [x] Comparison
    - [x] Sustainability Dashboard
    - [x] Emergency
-   - [ ] Chat Assistant
+   - [x] Chat Assistant
 
 2. **Interactive Features**
    - [ ] Implement filter functionality
